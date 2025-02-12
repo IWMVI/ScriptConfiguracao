@@ -63,6 +63,7 @@ install_packages npm "sudo $PKG_MGR" "npm"
 install_packages java "sudo $PKG_MGR" "java-17-openjdk"
 install_packages node "sudo $PKG_MGR" "nodejs"
 install_packages docker "sudo $PKG_MGR" "docker docker-compose"
+install_packages g++ "sudo $PKG_MGR" "g++"
 
 # Instalação do GNOME Tweaks e GNOME Extensions
 
