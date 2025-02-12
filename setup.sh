@@ -10,6 +10,18 @@ else
     exit 1
 fi
 
+# Se for Debian, configuração do Sudo
+if [[ "$OS" == "debian" ]]; then
+    echo "Verificando se o sudo está instalado..."
+    if ! command -v sudo &> /dev/null; then
+        echo "Sudo não instalado, alterando para usuário root..."
+        su -c "apt update && apt install -y sudo && usermod -aG sudo $USER"
+        echo "$USER ALL=(ALL:ALL) ALL" | su -c 'tee -a /etc/sudoers'
+        echo "Sudo configurado para $USER. Reinicie a sessão para aplicar as mudanças."
+        exit 0
+    fi
+fi
+
 # Atualizar o sistema
 
 echo "Atualizando o sistema"
