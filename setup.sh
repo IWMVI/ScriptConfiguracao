@@ -101,6 +101,21 @@ echo "Configurando o Docker..."
 sudo systemctl enable --now docker
 sudo usermod -aG docker $USER
 
+# Configuração MySQL
+
+echo "Verificando se contêiner MySQL já existe..."
+if ! sudo docker ps -a --format '{{.Names}}' | grep -q "^MySQL$"; then
+    echo "Criando contêiner MySQL..."
+    sudo docker run -d \
+        --name MySQL \
+        -e MYSQL_ROOT_PASSWORD=P4ssw0rd \
+        -p 3306:3306 \
+        mysql:latest
+    echo "Contêiner MySQL criado com sucesso."
+else
+    echo "Contêiner MySQL já existe."
+fi
+
 # Remover pacotes desnecessários
 
 echo "Limpando pacotes desnecessários..."
