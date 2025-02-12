@@ -5,7 +5,7 @@
 if [[ -f /etc/os-release ]]; then
     . /etc/os-release
     OS=$ID
-else 
+else
     echo "Não foi possível detectar a distribuição"
     exit 1
 fi
@@ -17,7 +17,7 @@ if [[ "$OS" == "fedora" ]]; then
     sudo dnf update -y
 elif [[ "$OS" == "debian" || "$OS" == "ubuntu" ]]; then
     sudo apt update && sudo apt upgrade -y
-else 
+else
     echo "Distribuição não suportada"
     exit 1
 fi
@@ -25,7 +25,7 @@ fi
 # Função para verificar e instalar pacotes
 
 install_packages() {
-    if ! command -v $1 &> /dev/null; then
+    if ! command -v $1 &>/dev/null; then
         echo "Instalando $1..."
         sudo $2 install -y $3
     else
@@ -51,11 +51,16 @@ install_packages npm "sudo $PKG_MGR" "npm"
 install_packages java "sudo $PKG_MGR" "java-17-openjdk"
 install_packages node "sudo $PKG_MGR" "nodejs"
 install_packages docker "sudo $PKG_MGR" "docker docker-compose"
-install_packages gnome-tweaks "sudo $PKG_MGR" "gnome-tweaks"
-install_packages gnome-extensions-app "sudo $PKG_MGR" "gnome-shell-extensions"
 
+# Instalação do GNOME Tweaks e GNOME Extensions
+
+if [[ "$OS" == "debian" || "$OS" == "fedora" ]]; then
+    install_packages gnome-tweaks "sudo $PKG_MGR" "gnome-tweaks"
+    install_packages gnome-extensions-app "sudo $PKG_MGR" "gnome-shell-extensions"
+fi
 
 # Instalação do .NET SDK
+
 if [[ "$OS" == "debian" || "$OS" == "ubuntu" ]]; then
     echo "Configurando repositório do .NET..."
     wget https://packages.microsoft.com/config/$OS/$VERSION_ID/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -70,7 +75,7 @@ fi
 # Instalação Angular CLI
 
 echo "Verificando instalação do Angular CLI"
-if ! command -v ng &> /dev/null; then
+if ! command -v ng &>/dev/null; then
     echo "Instalando o Angular CLI..."
     sudo npm install -g @angular/cli
     echo "Angular instalado com sucesso."
